@@ -1,0 +1,15 @@
+.mygrid{
+-fx-padding: 10;
+-fx-border-color: transparent transparent #a0a0a0 transparent;
+-fx-border-width= 0 0 1 0;
+}
+.bord{
+-fx-padding: 10;
+-fx-border-color: #a0a0a0;
+}
+.bord_o{
+    -fx-padding:10.0;
+}
+
+
+
