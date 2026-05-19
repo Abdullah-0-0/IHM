@@ -14,35 +14,36 @@ import javafx.scene.layout.GridPane
 class ControleurBoutonAjoutLivre(model : Bibliotheque, vue : MainVue) : EventHandler<ActionEvent>{
     val model : Bibliotheque
     val vue : MainVue
-    var compte = 0
+    private var compte = 0
+    val livresAffiches = arrayListOf<Livre>()
+
 
 
     init {
         this.model = model
         this.vue = vue
-
+        model.preremplir()
     }
 
 
     var liv : ArrayList<Livre> = arrayListOf<Livre>()
 
-    override fun equals(other: Any?): Boolean {
-        if (this == other) return true
-        return false
-    }
-    override fun handle(event: ActionEvent ) {
-        model.preremplir()
-        val livre = model.donneTousLesLivres()
-        var l : Livre
 
-        l = livre[compte]
-        if (compte<9){
-            liv.add(l)
+    override fun handle(event: ActionEvent ) {
+        val tousLesLivres = model.donneTousLesLivres()
+
+        if (compte < tousLesLivres.size) {
+            val livre = tousLesLivres[compte]
+            livresAffiches.add(livre)
+
+            vue.updateContenuPanneauGauche(livresAffiches)
+
+            compte++
+        }
+        else{
+            println("livre complete")
         }
 
-
-        ++compte
-        vue.updateContenuPanneauGauche(liv)
     }
 
 

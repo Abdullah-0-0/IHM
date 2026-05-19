@@ -18,8 +18,9 @@ class ControleurDetailLivre(model : Bibliotheque , vue : MainVue) : EventHandler
         val label = event.source as Label
         modele.preremplir()
         var livres = modele.donneTousLesLivres()
-
         val ind = GridPane.getRowIndex(label)
-        vue.updateContenuPanneauGauche(livres,this, ind)
+        vue.effacerSelectionPanneauGauche()
+        vue.selectionnerLignePanneauGauche(ind)
+        vue.updateContenuPanneauDroit(ind,livres[ind])
     }
 }
