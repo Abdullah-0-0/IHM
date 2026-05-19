@@ -4,11 +4,7 @@ import ihm.td5.librairie.Livre
 import ihm.td5.modele.Bibliotheque
 import ihm.td5.vue.MainVue
 import javafx.event.ActionEvent
-import javafx.event.Event
 import javafx.event.EventHandler
-import javafx.scene.control.Label
-import javafx.scene.input.MouseEvent
-import javafx.scene.layout.GridPane
 
 
 class ControleurBoutonAjoutLivre(model : Bibliotheque, vue : MainVue) : EventHandler<ActionEvent>{
@@ -22,11 +18,10 @@ class ControleurBoutonAjoutLivre(model : Bibliotheque, vue : MainVue) : EventHan
     init {
         this.model = model
         this.vue = vue
-        model.preremplir()
     }
 
 
-    var liv : ArrayList<Livre> = arrayListOf<Livre>()
+
 
 
     override fun handle(event: ActionEvent ) {
