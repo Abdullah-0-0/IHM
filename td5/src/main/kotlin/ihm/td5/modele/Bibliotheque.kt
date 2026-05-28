@@ -14,7 +14,7 @@ import ihm.td5.librairie.Livre
  * réécrit en kotlin en 2022 et modifié par jacquin-c
  */
 
-class Bibliotheque() {
+class Bibliotheque {
 
 
     private val livres: MutableList<Livre>
