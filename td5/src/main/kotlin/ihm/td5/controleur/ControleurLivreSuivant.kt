@@ -5,15 +5,15 @@ import ihm.td5.vue.MainVue
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
 
-class ControleurLivreSuivant(vue: MainVue, model : Bibliotheque) : EventHandler<ActionEvent>{
-    private val model : Bibliotheque
+class ControleurLivreSuivant(vue : MainVue, model : Bibliotheque): EventHandler<ActionEvent> {
     private val vue : MainVue
-
+    private val model : Bibliotheque
     init {
-        this.model = model
         this.vue = vue
+        this.model = model
     }
-    override fun handle(p0: ActionEvent) {
+
+    override fun handle(event: ActionEvent) {
         if (model.ilYaLivreSuivant()){
             ++model.courant
             vue.effacerSelectionPanneauGauche()
@@ -26,7 +26,5 @@ class ControleurLivreSuivant(vue: MainVue, model : Bibliotheque) : EventHandler<
             vue.activerBouton2PanneauDroit(false)
             vue.activerBouton1PanneauDroit(true)
         }
-
     }
-
 }

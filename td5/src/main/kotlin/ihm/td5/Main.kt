@@ -1,6 +1,8 @@
 package ihm.td5
 
 
+import ihm.td5.controleur.ControleurAjouterPanneauDroit
+import ihm.td5.controleur.ControleurBoutonAjoutLivre
 import ihm.td5.controleur.ControleurBoutonModificationLivre
 import ihm.td5.controleur.ControleurBoutonSuppressionLivre
 import ihm.td5.controleur.ControleurDetailLivre
@@ -16,17 +18,25 @@ import javafx.stage.Stage
 class Main: Application() {
 
     override fun start(primaryStage: Stage) {
+       val vue =  MainVue()
         val model = Bibliotheque()
-        val vue = MainVue()
-        var contr_detail = ControleurDetailLivre(vue,model)
         model.preremplir()
-        vue.updateContenuPanneauGauche(model.donneTousLesLivres(),contr_detail,model.courant)
-        vue.updateContenuPanneauDroit(model.courant,model.donneLivre(model.courant))
-        vue.fixeControleurBouton(vue.getBouton2PanneauDroit(), ControleurLivreSuivant(vue,model))
-        vue.fixeControleurBouton(vue.getBouton1PanneauDroit(), ControleurLivrePrecedent(vue,model))
-        vue.fixeControleurBouton(vue.boutonModification,ControleurBoutonModificationLivre(vue, model))
-        vue.boutonSuppression.onAction = ControleurBoutonSuppressionLivre(vue,model)
+        val ControleDetail = ControleurDetailLivre(vue, model)
+        val controle_suivant = ControleurLivreSuivant(vue,model)
+        val controle_preced = ControleurLivrePrecedent(vue,model)
+        val contro_supp = ControleurBoutonSuppressionLivre(vue,model)
+        val contro_ajout = ControleurBoutonAjoutLivre(vue,model)
         val scene = Scene(vue, 550.0, 350.0)
+
+        vue.updateContenuPanneauGauche(model.donneTousLesLivres(),ControleDetail,model.courant)
+        vue.updateContenuPanneauDroit(model.courant, model.donneLivre())
+        vue.fixeControleurBouton(vue.getBouton2PanneauDroit(),controle_suivant)
+        vue.fixeControleurBouton(vue.getBouton1PanneauDroit(),controle_preced)
+        vue.fixeControleurBouton(
+            vue.boutonModification, ControleurBoutonModificationLivre(vue,model)
+        )
+        vue.boutonSuppression.onAction = contro_supp
+        vue.boutonAjout.onAction = contro_ajout
         primaryStage.title="TD5"
         primaryStage.scene=scene
         primaryStage.show()

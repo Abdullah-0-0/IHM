@@ -8,34 +8,44 @@ import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
 
 
-class ControleurBoutonSuppressionLivre(vue: MainVue, model : Bibliotheque): EventHandler<ActionEvent>{
+class ControleurBoutonSuppressionLivre(vue : MainVue, model : Bibliotheque) : EventHandler<ActionEvent>{
     private val vue : MainVue
     private val model : Bibliotheque
+
     init {
         this.vue = vue
         this.model = model
     }
 
     override fun handle(p0: ActionEvent?) {
-        var alert = Alert(Alert.AlertType.CONFIRMATION)
-        alert.title= "boîte de dialogue de confirmation"
-        alert.contentText="Voulez vous vraiment supprimer ce livre"
-        alert.showAndWait()
-        if (alert.result== ButtonType.OK){
-            if (!model.estVide()){
+        val alerte = Alert(Alert.AlertType.CONFIRMATION)
+        alerte.title="Boite de dialogue de confirmation"
+        alerte.contentText = "Voulez vous vraiment supprimer ce livre"
+        alerte.showAndWait()
+        if (!model.estVide()){
+            if (alerte.result == ButtonType.OK){
+                vue.effacerSelectionPanneauGauche()
                 model.suppressionLivre()
-                vue.updateContenuPanneauGauche(model.donneTousLesLivres())
+                vue.updateContenuPanneauGauche(model.donneTousLesLivres(),ControleurDetailLivre(vue, model),
+                    model.courant)
+                vue.selectionnerLignePanneauGauche(model.courant)
                 vue.updateContenuPanneauDroit(model.courant,model.donneLivre())
-            }
-            else{
-                vue.updateContenuPanneauDroit(-1,null)
-                println("plus de livre à supprimé")
+                vue.activerBouton1PanneauDroit(model.ilYaLivrePrecedent())
+                vue.activerBouton2PanneauDroit(model.ilYaLivreSuivant())
+
             }
         }
         else{
-            println("Annulation")
+            vue.boutonSuppression.isDisable = true
+            vue.activerBouton1PanneauDroit(false)
+            vue.activerBouton2PanneauDroit(false)
+            vue.updateContenuPanneauGauche(model.donneTousLesLivres(), -1)
+            vue.updateContenuPanneauDroit(-1, null)
+
+
+
         }
-        vue.activerBouton2PanneauDroit(model.ilYaLivreSuivant())
-        vue.activerBouton1PanneauDroit(model.ilYaLivrePrecedent())
+
+
     }
 }

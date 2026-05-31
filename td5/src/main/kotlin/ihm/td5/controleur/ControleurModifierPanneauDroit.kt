@@ -7,64 +7,34 @@ import ihm.td5.vue.TitledPaneLivre
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.scene.control.Alert
+import javafx.scene.control.ButtonType
 
-class ControleurModifierPanneauDroit(vue : MainVue, modele : Bibliotheque): EventHandler<ActionEvent>{
-    private val modele : Bibliotheque
+class ControleurModifierPanneauDroit(vue: MainVue , model : Bibliotheque): EventHandler<ActionEvent>{
+    private val model : Bibliotheque
     private val vue : MainVue
     init {
         this.vue = vue
-        this.modele = modele
-
+        this.model = model
     }
 
-    override fun handle(p0: ActionEvent?) {
-        val titre = vue.getContenuTextFieldPanneauDroit().trim()
-        val categorie = vue.getCategorieComboBoxPanneauDroit()
-        val auteur = vue.getAuteurComboBoxPanneauDroit()
-
-        if (titre.isEmpty()) {
-            val dialog = Alert(Alert.AlertType.INFORMATION)
-            dialog.title = "Information"
-            dialog.headerText = "Titre manquant"
-            dialog.contentText = "Veuillez saisir un titre."
-            dialog.showAndWait()
-            return
-        }
-
-        val livreModifie = Livre(titre, categorie, auteur)
-
-        modele.modifierLivre(livreModifie)
-
-        vue.updateContenuPanneauGauche(
-            modele.donneTousLesLivres(),
-            ControleurDetailLivre(vue, modele),
-            modele.courant
-        )
-
-        val panneauNormal = TitledPaneLivre("information Livre")
-        vue.updatePanneauDroit(panneauNormal)
-
-        vue.updateContenuPanneauDroit(
-            modele.courant,
-            modele.donneLivre()
-        )
-
-        vue.fixeControleurBouton(
-            vue.getBouton1PanneauDroit(),
-            ControleurLivrePrecedent(vue, modele)
-        )
-
-        vue.fixeControleurBouton(
-            vue.getBouton2PanneauDroit(),
-            ControleurLivreSuivant(vue, modele)
-        )
-
-        vue.activerBouton1PanneauDroit(modele.ilYaLivrePrecedent())
-        vue.activerBouton2PanneauDroit(modele.ilYaLivreSuivant())
-
-        vue.boutonModification.isDisable = false
+    override fun handle(p0: ActionEvent) {
         vue.boutonAjout.isDisable = false
+        vue.boutonModification.isDisable = false
         vue.boutonSuppression.isDisable = false
+        val title= vue.getContenuTextFieldPanneauDroit()
+        val cate = vue.getCategorieComboBoxPanneauDroit()
+        val auteur = vue.getAuteurComboBoxPanneauDroit()
+        val alerte = Alert(Alert.AlertType.CONFIRMATION)
+        alerte.title = "modifier livre"
+        alerte.contentText = "voulez vous modifier ce livre"
+        alerte.showAndWait()
+        if (alerte.result == ButtonType.OK){
+            val livre_maj = Livre(title,cate,auteur)
+            model.modifierLivre(livre_maj)
+        }
+        val panneau_normal = TitledPaneLivre("information livre")
+        vue.updatePanneauDroit(panneau_normal)
+        vue.updateContenuPanneauDroit(model.courant,model.donneLivre())
+        vue.updateContenuPanneauGauche(model.donneTousLesLivres())
     }
-
 }
